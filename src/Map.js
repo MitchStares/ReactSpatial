@@ -18,6 +18,12 @@ const Map = () => {
     setIsOpen(!isOpen);
   };
 
+
+  // map.current.addSource("Local Government Area",{
+  //   type: 'geojson',
+  //   data: 'https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Administrative_Boundaries_Theme/FeatureServer/8/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&havingClause=&gdbVersion=&historicMoment=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=xyFootprint&resultOffset=&resultRecordCount=&returnTrueCurves=false&returnExceededLimitFeatures=false&quantizationParameters=&returnCentroid=false&sqlFormat=none&resultType=&featureEncoding=esriDefault&datumTransformation=&f=geojson'
+  // });
+
   useEffect(() => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
@@ -25,6 +31,22 @@ const Map = () => {
       style: 'mapbox://styles/mapbox/streets-v12',
       center: [lng, lat],
       zoom: zoom
+    });
+    map.current.on('load',() => {
+      map.current.addSource("LocalGovernmentArea",{
+          type: 'geojson',
+          data: 'https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Administrative_Boundaries_Theme/FeatureServer/8/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&havingClause=&gdbVersion=&historicMoment=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=xyFootprint&resultOffset=&resultRecordCount=&returnTrueCurves=false&returnExceededLimitFeatures=false&quantizationParameters=&returnCentroid=false&sqlFormat=none&resultType=&featureEncoding=esriDefault&datumTransformation=&f=geojson'
+        });
+        map.current.addLayer({
+          id: "local-government-area",
+          type: "fill",
+          source: "LocalGovernmentArea",
+          paint: {
+            "fill-opacity": 0.8,
+            "fill-color": "#f05c5c",
+            "fill-outline-color": "#000000"
+          },
+        })
     });
   });
 
@@ -39,7 +61,14 @@ const Map = () => {
       setLng(e.lngLat.lng.toFixed(4));
       setLat(e.lngLat.lat.toFixed(4));
     });
-  });
+    map.current.on('click','local-government-area', (e) =>{
+      const lganame = e.features[0].properties.lganame;
+            
+      new mapboxgl.Popup()
+      .setHTML(lganame)
+      .addTo(map);
+      });
+    });
 
   return (
     <div>
