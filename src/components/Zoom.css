@@ -1,0 +1,40 @@
+.zoomBar {
+    background-color: rgba(35, 55, 75, 0.9);
+    color: #fff;
+    font-family: monospace;
+    z-index: 1;
+    position: absolute;
+    margin: 12px;
+    border-radius: 4px;  
+    bottom: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+  
+.zoomLevel {
+  size: 24px;
+  text-align: center;
+  padding: 12px 12px;
+}
+
+.zoomControl {
+    width: 36px;
+    height: 36px;
+    border: none;
+    box-shadow: 6px 0px 10px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(35, 55, 75, 0.9);
+    border-radius: 4px;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 600,
+  'GRAD' 0,
+  'opsz' 48;
+  color: #fff;
+}
