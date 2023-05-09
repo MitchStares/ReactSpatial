@@ -8,6 +8,10 @@ body {
   margin: 0;
   padding: 0;
 }
+.mapboxgl-map {
+  position: absolute;
+}
+
 .coordinates {
   background-color: rgba(35, 55, 75, 0.9);
   color: #fff;
@@ -38,12 +42,12 @@ body {
   font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
   }
 
-  mapboxgl-popup-content {
-    min-width: 200px;
-  }
+mapboxgl-popup-content {
+   min-width: 200px;
+}
 
-  .lga-name {
-    color: rgba(0, 0, 0, 0.7);
-    font-size: 0.875rem;
-    margin: 0;
-  }
+.lga-name {
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 0.875rem;
+  margin: 0;
+}
