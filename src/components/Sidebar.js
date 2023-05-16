@@ -9,6 +9,15 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       </button>
       {isOpen && (
         <div className="sidebar-content">
+          <div className="sidebar-headerblock">
+            <header className="sidebar-header"><p>FocalPoint</p></header>
+          </div>
+          <div className='sidebar-topMenu'>
+            <div>
+              <a href="/">Information</a>
+              <a href='/'>Insights</a>
+            </div>
+          </div>
           {"Text"/* Sidebar content goes here */}
         </div>
       )}

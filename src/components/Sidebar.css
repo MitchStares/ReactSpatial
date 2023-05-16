@@ -27,6 +27,22 @@
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
   }
+  .sidebar-header {
+    position: absolute;
+    top: 0;
+    left: auto;
+    right: 0;
+    display: flex;
+    z-index: 2;
+    overflow: hidden;
+    position: relative;
+    box-shadow: none;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    justify-content: center;
+    color: #fff;
+    font-size: 36px;
+  }
 
 .material-symbols-outlined {
   font-variation-settings:
