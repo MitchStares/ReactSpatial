@@ -1,5 +1,6 @@
 import React from 'react';
 import "./Sidebar.css";
+import AppBar from '@mui/material/AppBar';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
    return (
@@ -9,9 +10,10 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       </button>
       {isOpen && (
         <div className="sidebar-content">
-          <div className="sidebar-headerblock">
+          <AppBar position='absolute'>
             <header className="sidebar-header"><p>FocalPoint</p></header>
-          </div>
+          </AppBar>
+          
           <div className='sidebar-topMenu'>
             <div>
               <a href="/">Information</a>
