@@ -7,20 +7,20 @@ import ReactDOM from "react-dom";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
-const Popup = ({ lganame }) => (
-  <div className="popup">
-    <h3 className="lga-name">{lganame}</h3>
-    {/* <div className="route-metric-row">
-      <h4 className="row-title">Route #</h4>
-      <div className="row-value">{routeNumber}</div>
-    </div>
-    <div className="route-metric-row">
-      <h4 className="row-title">Route Type</h4>
-      <div className="row-value">{type}</div>
-    </div>
-    <p className="route-city">Serves {city}</p> */}
-  </div>
-);
+// const Popup = ({ lganame }) => (
+//   <div className="popup">
+//     <h3 className="lga-name">{lganame}</h3>
+//     {/* <div className="route-metric-row">
+//       <h4 className="row-title">Route #</h4>
+//       <div className="row-value">{routeNumber}</div>
+//     </div>
+//     <div className="route-metric-row">
+//       <h4 className="row-title">Route Type</h4>
+//       <div className="row-value">{type}</div>
+//     </div>
+//     <p className="route-city">Serves {city}</p> */}
+//   </div>
+// );
 
 const Map = () => {
   const mapContainer = useRef(null);
@@ -29,7 +29,8 @@ const Map = () => {
   const [lat, setLat] = useState(-33.8);
   const [zoom, setZoom] = useState(7);
   const [isOpen, setIsOpen] = useState(false);
-  const popupRef = useRef(new mapboxgl.Popup({ offset: 15 }));
+  // const popupRef = useRef(new mapboxgl.Popup({ offset: 15 }));
+  const [selectedFeatures, setSelectedFeatures] = React.useState([]);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -83,21 +84,22 @@ const Map = () => {
       });
       if (features.length > 0) {
         const feature = features[0];
+        setSelectedFeatures(feature.properties)
         // create popup node
-        const popupNode = document.createElement("div");
-        ReactDOM.render(
-          <Popup
-            lganame={feature?.properties?.lganame}
-            // routeNumber={feature?.properties?.LineAbbr}
-            // city={feature?.properties?.City}
-            // type={feature?.properties?.RouteType}
-          />,
-          popupNode
-        );
-        popupRef.current
-          .setLngLat(e.lngLat)
-          .setDOMContent(popupNode)
-          .addTo(map.current);
+        // const popupNode = document.createElement("div");
+        // ReactDOM.render(
+        //   <Popup
+        //     lganame={feature?.properties?.lganame}
+        //     // routeNumber={feature?.properties?.LineAbbr}
+        //     // city={feature?.properties?.City}
+        //     // type={feature?.properties?.RouteType}
+        //   />,
+        //   popupNode
+        // );
+        // popupRef.current
+        //   .setLngLat(e.lngLat)
+        //   .setDOMContent(popupNode)
+        //   .addTo(map.current);
       }
     });
   });
@@ -114,7 +116,7 @@ const Map = () => {
       />
       <Legend />
       <Zoom zoomLevel={zoom} />
-      <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
+      <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} selectedFeatures={selectedFeatures} />
     </div>
   );
 };
