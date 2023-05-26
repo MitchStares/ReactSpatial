@@ -1,6 +1,13 @@
 import React from "react";
 import "./Sidebar.css";
-import { AppBar, Tabs, Tab, Card, CardContent, Typography } from "@mui/material/";
+import {
+  AppBar,
+  Tabs,
+  Tab,
+  Card,
+  CardContent,
+  Typography,
+} from "@mui/material/";
 
 function LinkTab(props) {
   return (
@@ -42,16 +49,18 @@ const Sidebar = ({ isOpen, toggleSidebar, selectedFeatures }) => {
             <LinkTab label="Data" href="/data" />
           </Tabs>
           {/* </Box> */}
-          
+
           <Card sx={{ width: "50%", height: "33%" }}>
             <CardContent>
               <Typography variant="h5" component="div">
                 Local Government Area
               </Typography>
+              {selectedFeatures && (
                 <Typography variant="body2">
                   {/* Render the feature information */}
                   {selectedFeatures.lganame}
                 </Typography>
+              )}
             </CardContent>
           </Card>
         </div>

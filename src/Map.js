@@ -3,33 +3,34 @@ import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-load
 import Legend from "./components/Legend.js";
 import Sidebar from "./components/Sidebar.js";
 import Zoom from "./components/Zoom.js";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
-// const Popup = ({ lganame }) => (
-//   <div className="popup">
-//     <h3 className="lga-name">{lganame}</h3>
-//     {/* <div className="route-metric-row">
-//       <h4 className="row-title">Route #</h4>
-//       <div className="row-value">{routeNumber}</div>
-//     </div>
-//     <div className="route-metric-row">
-//       <h4 className="row-title">Route Type</h4>
-//       <div className="row-value">{type}</div>
-//     </div>
-//     <p className="route-city">Serves {city}</p> */}
-//   </div>
-// );
+const Popup = ({ lganame }) => (
+  <div className="popup">
+    <h3 className="lga-name">{lganame}</h3>
+    {/* <div className="route-metric-row">
+      <h4 className="row-title">Route #</h4>
+      <div className="row-value">{routeNumber}</div>
+    </div>
+    <div className="route-metric-row">
+      <h4 className="row-title">Route Type</h4>
+      <div className="row-value">{type}</div>
+    </div>
+    <p className="route-city">Serves {city}</p> */}
+  </div>
+);
 
 const Map = () => {
   const mapContainer = useRef(null);
+  const clickHandlerRef = React.useRef(null);
   const map = useRef(null);
   const [lng, setLng] = useState(151.21);
   const [lat, setLat] = useState(-33.8);
   const [zoom, setZoom] = useState(7);
   const [isOpen, setIsOpen] = useState(false);
-  // const popupRef = useRef(new mapboxgl.Popup({ offset: 15 }));
+  const popupRef = useRef(new mapboxgl.Popup({ offset: 15 }));
   const [selectedFeatures, setSelectedFeatures] = React.useState([]);
 
   const toggleSidebar = () => {
@@ -74,35 +75,42 @@ const Map = () => {
       setLat(map.current.getCenter().lat.toFixed(4));
       setZoom(map.current.getZoom().toFixed(0));
     });
-    map.current.on("click", (e) => {
+    // map.current.on("click", (e) => {
+    //   setLng(e.lngLat.lng.toFixed(4));
+    //   setLat(e.lngLat.lat.toFixed(4));
+    // });
+    clickHandlerRef.current = (e) => {
       setLng(e.lngLat.lng.toFixed(4));
       setLat(e.lngLat.lat.toFixed(4));
-    });
-    map.current.on("click", (e) => {
       const features = map.current.queryRenderedFeatures(e.point, {
         layers: ["local-government-area"],
       });
       if (features.length > 0) {
-        const feature = features[0];
-        setSelectedFeatures(feature.properties)
+        const selectedFeature = features[0].properties;
+        setSelectedFeatures(selectedFeature);
         // create popup node
-        // const popupNode = document.createElement("div");
-        // ReactDOM.render(
-        //   <Popup
-        //     lganame={feature?.properties?.lganame}
-        //     // routeNumber={feature?.properties?.LineAbbr}
-        //     // city={feature?.properties?.City}
-        //     // type={feature?.properties?.RouteType}
-        //   />,
-        //   popupNode
-        // );
-        // popupRef.current
-        //   .setLngLat(e.lngLat)
-        //   .setDOMContent(popupNode)
-        //   .addTo(map.current);
+        const popupNode = document.createElement("div");
+        ReactDOM.createRoot(popupNode).render(
+          <Popup
+            lganame={selectedFeature.lganame}
+            // routeNumber={feature?.properties?.LineAbbr}
+            // city={feature?.properties?.City}
+            // type={feature?.properties?.RouteType}
+          />
+        );
+        popupRef.current
+          .setLngLat(e.lngLat)
+          .setDOMContent(popupNode)
+          .addTo(map.current);
       }
-    });
-  });
+    };
+
+    map.current.on("click", clickHandlerRef.current);
+
+    return () => {
+      map.current.off("click", clickHandlerRef.current);
+    };
+  }, []);
 
   return (
     <div>
@@ -116,7 +124,11 @@ const Map = () => {
       />
       <Legend />
       <Zoom zoomLevel={zoom} />
-      <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} selectedFeatures={selectedFeatures} />
+      <Sidebar
+        isOpen={isOpen}
+        toggleSidebar={toggleSidebar}
+        selectedFeatures={selectedFeatures}
+      />
     </div>
   );
 };
